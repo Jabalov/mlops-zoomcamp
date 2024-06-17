@@ -45,6 +45,8 @@ def save_results(df, y_pred, output_file):
         
     df_result.to_parquet(
         output_file,
+        engine='pyarrow',
+        compression=None,
         index=False
     )
 
