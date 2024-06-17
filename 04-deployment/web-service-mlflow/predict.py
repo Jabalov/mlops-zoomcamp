@@ -4,13 +4,15 @@ import pickle
 import mlflow
 from flask import Flask, request, jsonify
 
+mlflow.set_tracking_uri("http://127.0.0.1:5000")
+mlflow.set_experiment("green-taxi-duration")
 
-RUN_ID = os.getenv('RUN_ID')
+# RUN_ID = os.getenv('RUN_ID')
+RUN_ID = '57d7a0c327824dcba30445d1ceb483a5'
 
-logged_model = f's3://mlflow-models-alexey/1/{RUN_ID}/artifacts/model'
-# logged_model = f'runs:/{RUN_ID}/model'
+# logged_model = f's3://mlflow-models-alexey/1/{RUN_ID}/artifacts/model'
+logged_model = f'runs:/{RUN_ID}/model'
 model = mlflow.pyfunc.load_model(logged_model)
-
 
 def prepare_features(ride):
     features = {}
@@ -25,8 +27,6 @@ def predict(features):
 
 
 app = Flask('duration-prediction')
-
-
 @app.route('/predict', methods=['POST'])
 def predict_endpoint():
     ride = request.get_json()
